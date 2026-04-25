@@ -7,9 +7,16 @@
     "config": "./.dotfiles/config.sh",
     "install:swiftlint": "brew install swiftlint",
     "install:swiftformat": "brew install swiftformat",
-    "install:all": "npx npm-run-all --sequential install:swiftlint install:swiftformat config",
+    "install:wasmtime": "curl https://wasmtime.dev/install.sh -sSf | bash",
+    "install:all": "npx npm-run-all --sequential install:swiftlint install:swiftformat install:wasmtime config",
     "format": "swiftformat .",
     "lint": "swiftlint --config=.swiftlint.yml .",
+    "build:host": "swift build",
+    "build:wasm": "swift build --package-path Examples/TestWasmProject --swift-sdk swift-6.2.3-RELEASE_wasm --product TestWasmProject",
+    "run:wasm": "wasmtime run --invoke test Examples/TestWasmProject/.build/wasm32-unknown-wasi/debug/TestWasmProject.wasm",
+    "test:wasm": "npx npm-run-all --sequential build:wasm run:wasm",
+    "run:example": "swift run --package-path Examples/WasmOTAExampleProject WasmOTAExampleProject",
+    "test:example": "npx npm-run-all --sequential build:wasm run:example",
     "update:submodules": "git submodule foreach --recursive 'branch=$(git remote show origin | awk \"/HEAD branch/ {print \\$NF}\"); git checkout $branch && git pull origin $branch' && CHANGED=$(git status --porcelain | grep '^ M \\.dotfiles' || true) && if [ -n \"$CHANGED\" ]; then npm run config; fi && git add -A && git commit -m \"chore: update submodules\" || echo 'No changes to commit'"
   },
   "repository": {
