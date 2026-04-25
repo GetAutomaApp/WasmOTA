@@ -13,7 +13,10 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "WasmOTAExampleProject",
-            dependencies: ["WasmOTA"]
+            dependencies: ["WasmOTA"],
+            resources: [
+                .copy("Resources/main.wasm")
+            ]
         )
     ]
 )
