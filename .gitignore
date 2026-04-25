@@ -1,2 +1,3 @@
 .swiftlint.yml
 .swiftformat
+.build
